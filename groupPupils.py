@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 # Reading the csv file
 data = pd.read_csv('data_Borough_school.csv')
 
+## ADDING BEER 
+
 # Calculating mean
 mean = data.mean()
 
