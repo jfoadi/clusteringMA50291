@@ -6,3 +6,4 @@ from .getStats import stats
 from .plot import plotting
 from .clusterResults import outputs
 from .exportCSV import exportToCSV
+from .DoItAll import ClusterOutputs
