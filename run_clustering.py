@@ -1,11 +1,13 @@
 # run_clustering.py
 
-from clustering_package import{
+from clustering_package import(
     cluster,
     readFile,
     stats,
-    plot
-}
+    plotting,
+    outputs,
+    exportToCSV
+)
 
 if __name__ == "__main__":
     data = readFile('data_Borough_school.csv')
@@ -19,4 +21,12 @@ if __name__ == "__main__":
     print('St. Deviation height:', std_dev['Height'])
     print('St. Deviation weight:', std_dev['Weight'])
 
-    centers, labels = cluster(data, 2)
+    n_clusters = 2
+
+    centers, labels = cluster(data, n_clusters)
+
+    plotting(data, centers, labels, "kmeans2_Modular")
+
+    outputs(data, centers, labels)
+
+    exportToCSV(data, labels, n_clusters, "cluster")
