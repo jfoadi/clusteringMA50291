@@ -14,14 +14,20 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import logging 
-from utils import loaddata, eda, clustering, visualization
+from utils import loaddata, eda, clustering, visualization, insights
 import yaml
 import seaborn as sns
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+
+# Logging configuration
+#logging.basicConfig(
+#    level=logging.DEBUG,
+#    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  
+#    datefmt='%Y-%m-%d %H:%M:%S'
+#)
+
+logging.basicConfig(filename='server-soap.1.log',
+        level=logging.INFO,
+        format='%(asctime)s %(levelname)s %(threadName)-10s %(message)s',)
 
 # Reading the parameters to be able to import the csv file
 logging.info("----------------------------------------------")
@@ -74,6 +80,17 @@ logging.info("----------------------------------------------")
 visualization.kplot(data_labels,n_clusters=n_clusters,cluster_centers=cluster_centers)
 
 
+
+logging.info("----------------------------------------------")
+logging.info("Step 5: Printing results")
+logging.info("----------------------------------------------")
+
+
+insights.insights(cluster_centers=cluster_centers, data=data_labels, n_clusters=n_clusters)
+
+
+
+
 # # Plotting the clusters into separate PNG files
 # plt.scatter(data['Height'], data['Weight'], c=labels2)
 # plt.scatter(centers2[:, 0], centers2[:, 1], c='red')
@@ -94,6 +111,8 @@ visualization.kplot(data_labels,n_clusters=n_clusters,cluster_centers=cluster_ce
 # plt.scatter(centers5[:, 0], centers5[:, 1], c='red')
 # plt.savefig('kmeans5.png')
 # plt.close()
+
+
 
 # # Print on screen results for 2 clusters
 # print('Results from 2 clusters:')
