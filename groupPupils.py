@@ -9,59 +9,48 @@
 # Initial version: 2020-11-26 - James Foadi
 
 # Importing necessary libraries
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import logging 
+from utils import loaddata, eda, clustering
+import yaml
 
-# Reading the csv file
-data = pd.read_csv('data_Borough_school.csv')
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelnames)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
-# Calculating mean
-mean = data.mean()
+# Reading the parameters to be able to import the csv file
+logging.info("----------------------------------------------")
+logging.info("Step 1: Importing process")
+logging.info("----------------------------------------------")
+with open('parameters/parameters.yaml', 'r') as file:
+    parameters = yaml.safe_load(file)
 
-# Calculating median
-median = data.median()
+filename = parameters['data']['filename']   
+path = parameters['data']['path']
+logging.info(f"The filepath is: {os.path.join(path,filename)}")
+logging.info(f"Importing the data")
+data = loaddata.load_data(filename, path)
 
-# Calculating variance
-variance = data.var()
+logging.info("----------------------------------------------")
+logging.info("Step 2: Descriptive and exploratory analysis")
+logging.info("----------------------------------------------")
 
-# Calculating standard deviation
-std_dev = data.std()
+# Display a table with the descriptive statistics
 
-# Printing the statistics
-print('Mean height:', mean['Height'])
-print('Mean weight:', mean['Weight'])
-print('Median height:', median['Height'])
-print('Median weight:', median['Weight'])
-print('St. Deviation height:', std_dev['Height'])
-print('St. Deviation weight:', std_dev['Weight'])
+logging.info("The descriptive statistics of the data are:")
+print(eda.descriptive_sts(data))
 
-# K-means clustering
-from sklearn.cluster import KMeans
 
-# Creating KMeans objects. Try 2, 3, 4, 5 clusters
-kmeans2 = KMeans(n_clusters=2)
-kmeans3 = KMeans(n_clusters=3)
-kmeans4 = KMeans(n_clusters=4)
-kmeans5 = KMeans(n_clusters=5)
+logging.info("----------------------------------------------")
+logging.info("Step 3: Clustering: Fitting Kmeans")
+logging.info("----------------------------------------------")
 
-# Fitting the data
-kmeans2.fit(data)
-kmeans3.fit(data)
-kmeans4.fit(data)
-kmeans5.fit(data)
+n_clusters = parameters['kmeans']['n_clusters']
+data_labels,score, cluster_centers = clustering(n_clusters=n_clusters,data=data)
 
-# Getting the cluster centers
-centers2 = kmeans2.cluster_centers_
-centers3 = kmeans3.cluster_centers_
-centers4 = kmeans4.cluster_centers_
-centers5 = kmeans5.cluster_centers_
-
-# Getting the labels
-labels2 = kmeans2.labels_
-labels3 = kmeans3.labels_
-labels4 = kmeans4.labels_
-labels5 = kmeans5.labels_
 
 # Plotting the clusters into separate PNG files
 plt.scatter(data['Height'], data['Weight'], c=labels2)
