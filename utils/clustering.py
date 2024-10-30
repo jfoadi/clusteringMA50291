@@ -4,7 +4,7 @@
 # K-means clustering
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+
 
 def clustering(n_clusters:list,data:pd.DataFrame):
     """ 
@@ -25,7 +25,7 @@ def clustering(n_clusters:list,data:pd.DataFrame):
     for k in n_clusters:
         cluster = KMeans(n_clusters=k)
         cluster.fit(data)
-        score.append(silhouette_score(data, cluster.labels_, metric='euclidean'))
+        score.append(cluster.inertia_)
         data_labels[f'k{k}_labels'] = cluster.labels_
         cluster_centers[f'K{k}'] = cluster.cluster_centers_
 
