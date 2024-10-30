@@ -7,9 +7,20 @@ from clustering_package import(
     outputs,
     exportToCSV
 )
-
+import os
 
 def ClusterOutputs(data, n_clusters, plot_name_base, CSV_name_base):
+    # Add folders to save CSV and plots to
+    if os.path.isdir("CSV_Outputs/"):
+        print()
+    else:
+        os.mkdir("CSV_Outputs/")
+
+    if os.path.isdir("Plot_Outputs/"):
+        print()
+    else:
+        os.mkdir("Plot_Outputs/")
+
     # Calculates all the relevant stats from the data and outputs them
     mean, median, variance, std_dev = stats(data)
     print("====================================\n STATS \n====================================")
