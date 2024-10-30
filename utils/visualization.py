@@ -9,7 +9,15 @@ import numpy as np
 
 
 def kplot(data:pd.DataFrame, n_clusters:list,cluster_centers:dict):
-
+    """
+    Function to display a scatter plot segregating each cluster
+        args:
+            - data: data with the labels for each kmean model
+            - n_cluster: list with the number of clusters
+            - cluster_centers: dictionary with the centre points for each fitting kmean model
+        outcome:
+            png images with the scatter plot and the clusters
+    """
     for k,centers in zip(n_clusters,cluster_centers.values()):
         
         var = f"k{k}_labels"
