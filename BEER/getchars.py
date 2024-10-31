@@ -1,6 +1,9 @@
-def getchars(name, char, column):
-    if column == 'Weight' or column == 'Height':
-        return print(column + ' ' + name + ': ', char[column])
-    else:
-        return print('Unexpected characteristic or column name provided')
-#print(column + ' ' + name + ': ')
+def getchars(mean1, median1, var1, std1, column, data):
+        print('')
+        print(column.upper() + ' HAS THE FOLLOWING CHARACTERISTICS:')
+        print(     '> Mean: ', mean1[column])
+        print(     '> Median: ', median1[column])
+        print(     '> Variance: ', var1[column])
+        print(     '> Standard Diviation: ', std1[column])
+        print('')
+
