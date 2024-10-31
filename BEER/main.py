@@ -2,12 +2,13 @@
 import pandas as pd   # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans 
+from sklearn.cluster import KMeans    # type: ignore
 
 # Importing my functions from the files in the directory
 import data_chars as ch
 import getchars as gc
 import kmeans as km
+import printresults as pr
 
 # Importing the data
 data = pd.read_csv('data_Borough_school.csv')
@@ -36,4 +37,5 @@ for j in range(2,j+1):
     plt.savefig(f'kmeans{j}.png')
     plt.close()
 
-
+for k in range(2,j+1):
+    pr.printresults(k,allcentres,alllabels,data)
