@@ -23,9 +23,9 @@ mean = data.mean()
 
 # Calculating median
 median = data.median()
-
+print('bozo', median)
 # Calculating variance
-variance = data.var()
+variance = data.var() 
 
 # Calculating standard deviation
 std_dev = data.std()
