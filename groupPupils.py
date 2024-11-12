@@ -12,14 +12,20 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import sklearn
 
-# Reading the csv file
-data = pd.read_csv('data_Borough_school.csv')
+import os
+# Set the working directory to the Downloads folder
+downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+os.chdir(downloads_path)
+data = pd.read_csv("/Users/New User/Desktop/repository/clusteringMA50291/data_Borough_school.csv")
 
 # Calculating mean
 mean = data.mean()
 
-# Calculating median
+# Ca
+# 
+# lculating median
 median = data.median()
 
 # Calculating variance
@@ -40,103 +46,49 @@ print('St. Deviation weight:', std_dev['Weight'])
 from sklearn.cluster import KMeans
 
 # Creating KMeans objects. Try 2, 3, 4, 5 clusters
-kmeans2 = KMeans(n_clusters=2)
-kmeans3 = KMeans(n_clusters=3)
-kmeans4 = KMeans(n_clusters=4)
-kmeans5 = KMeans(n_clusters=5)
 
-# Fitting the data
-kmeans2.fit(data)
-kmeans3.fit(data)
-kmeans4.fit(data)
-kmeans5.fit(data)
+#define kmeans so that we can reuse for any value of data and number of clusters
+def perform_kmeans(n_clusters, data):
+      kmeans = KMeans(n_clusters=n_clusters)
+      kmeans.fit(data)
+      centers = kmeans.cluster_centers_
+      labels = kmeans.labels_
+      return centers, labels
 
-# Getting the cluster centers
-centers2 = kmeans2.cluster_centers_
-centers3 = kmeans3.cluster_centers_
-centers4 = kmeans4.cluster_centers_
-centers5 = kmeans5.cluster_centers_
+def plot_clusters(data, centers, labels, filename):
+    """Plot the clustered data and save the figure."""
+    plt.scatter(data['Height'], data['Weight'], c=labels, cmap='viridis')
+    plt.scatter(centers[:, 0], centers[:, 1], c='red', marker='x')
+    plt.title("KMeans Clustering")
+    plt.xlabel("Height")
+    plt.ylabel("Weight")
+    plt.savefig(filename)
+    plt.close()
 
-# Getting the labels
-labels2 = kmeans2.labels_
-labels3 = kmeans3.labels_
-labels4 = kmeans4.labels_
-labels5 = kmeans5.labels_
+def print_cluster_info(data, centers, labels):
+    print(f"Results from {len(centers)} clusters:")
+    for i, center in enumerate(centers):
+        print(f"Representative points: Height, Weight for Group {i + 1}: {center}")
+        print(f"Number of pupils in Group {i + 1}: {len(data[labels == i])}")
 
-# Plotting the clusters into separate PNG files
-plt.scatter(data['Height'], data['Weight'], c=labels2)
-plt.scatter(centers2[:, 0], centers2[:, 1], c='red')
-plt.savefig('kmeans2.png')
-plt.close()
+def export_clusters_to_csv(data, labels, prefix='cluster'):
+    for label in labels:
+        filename = f"{prefix}{label + 1}.csv"
+        data[labels == label].to_csv(filename, index=False)
+        print(f"Cluster {label + 1} exported to {filename}")
 
-plt.scatter(data['Height'], data['Weight'], c=labels3)
-plt.scatter(centers3[:, 0], centers3[:, 1], c='red')
-plt.savefig('kmeans3.png')
-plt.close()
-
-plt.scatter(data['Height'], data['Weight'], c=labels4)
-plt.scatter(centers4[:, 0], centers4[:, 1], c='red')
-plt.savefig('kmeans4.png')
-plt.close()
-
-plt.scatter(data['Height'], data['Weight'], c=labels5)
-plt.scatter(centers5[:, 0], centers5[:, 1], c='red')
-plt.savefig('kmeans5.png')
-plt.close()
-
-# Print on screen results for 2 clusters
-print('Results from 2 clusters:')
-print('Representative points: Height, Weight for Group 1:', 
-      centers2[0])
-print('Representative points: Height, Weight for Group 2:', 
-      centers2[1])
-print('Number of pupils in each group:', len(data[labels2 == 0]), 
-      len(data[labels2 == 1]))
-
-# Print on screen results for 3 clusters
-print('Results from 3 clusters:')
-print('Representative points: Height, Weight for Group 1:', 
-      centers3[0])
-print('Representative points: Height, Weight for Group 2:',
-      centers3[1])
-print('Representative points: Height, Weight for Group 3:',
-      centers3[2])
-print('Number of pupils in each group:', len(data[labels3 == 0]),
-      len(data[labels3 == 1]), len(data[labels3 == 2]))
-
-# Print on screen results for 4 clusters
-print('Results from 4 clusters:')
-print('Representative points: Height, Weight for Group 1:', 
-      centers4[0])
-print('Representative points: Height, Weight for Group 2:',
-      centers4[1])
-print('Representative points: Height, Weight for Group 3:',
-      centers4[2])
-print('Representative points: Height, Weight for Group 4:',
-      centers4[3])
-print('Number of pupils in each group:', len(data[labels4 == 0]),
-      len(data[labels4 == 1]), len(data[labels4 == 2]),
-      len(data[labels4 == 3]))
-
-# Print on screen results for 5 clusters
-print('Results from 5 clusters:')
-print('Representative points: Height, Weight for Group 1:', 
-      centers5[0])
-print('Representative points: Height, Weight for Group 2:',
-      centers5[1])
-print('Representative points: Height, Weight for Group 3:',
-      centers5[2])
-print('Representative points: Height, Weight for Group 4:',
-      centers5[3])
-print('Representative points: Height, Weight for Group 5:',
-      centers5[4])
-print('Number of pupils in each group:', len(data[labels5 == 0]),
-      len(data[labels5 == 1]), len(data[labels5 == 2]),
-      len(data[labels5 == 3]), len(data[labels5 == 4]))
+#create for loop to display kmeans data 2,3,4,5 as
+for i in range(2,6):
+      centers, labels = perform_kmeans(i, data)
+      plot_clusters(data, centers, labels, f'kmeans{i}.png')
+      print_cluster_info(data, centers, labels)
+      export_clusters_to_csv(data, labels)
 
 # 
 # Exporting the clusters to separate csv files
 # Not happy about this! Please change as you think best.
+
+
 #data[labels2 == 0].to_csv('cluster1.csv')
 #data[labels2 == 1].to_csv('cluster2.csv')
 #data[labels3 == 0].to_csv('cluster1.csv')
